@@ -1,7 +1,70 @@
 <template>
-  <div></div>
+  <cropper
+    class="bg-light-100 h-[600px] w-[600px]"
+    ref="cropperBox"
+    :src="img"
+    :stencil-props="{
+      aspectRatio: 16 / 9,
+    }"
+    :stencil-component="$options.components.CircleStencil"
+  />
+  <button @click="getCrop">getCrop</button>
+  <input type="file" @change="loadImage($event)" accept="image/*" />
+  <div>
+    <img :src="cropedImg" alt="" v-if="cropedImg" />
+  </div>
 </template>
 
-<script setup></script>
+<script>
+import { ref } from 'vue';
+import { Cropper, CircleStencil } from 'vue-advanced-cropper';
+import 'vue-advanced-cropper/dist/style.css';
+import img2 from '../public/berserk.jpeg';
 
-<style lang="scss" scoped></style>
+export default {
+  components: {
+    Cropper,
+    CircleStencil,
+  },
+  setup() {
+    const img = ref(
+      'https://images.unsplash.com/photo-1600984575359-310ae7b6bdf2?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=700&q=80'
+    );
+
+    const cropperBox = ref(null);
+    const cropedImg = ref('');
+
+    const getCrop = () => {
+      const { canvas } = cropperBox.value.getResult();
+
+      cropedImg.value = canvas.toDataURL();
+    };
+
+    const loadImage = event => {
+      const { files } = event.target;
+
+      if (files?.[0]) {
+        const blob = URL.createObjectURL(files[0]);
+        const reader = new FileReader();
+
+        reader.readAsArrayBuffer(files[0]);
+
+        reader.addEventListener('load', () => {
+          img.value = blob;
+        });
+      }
+    };
+
+    return {
+      img,
+      img2,
+      cropedImg,
+      cropperBox,
+      getCrop,
+      loadImage,
+    };
+  },
+};
+</script>
+
+<style scoped></style>
