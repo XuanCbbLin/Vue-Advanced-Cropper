@@ -1,21 +1,22 @@
 <template>
   <div class="flex">
     <div>
-      <cropper
-        class="bg-light-100 h-[600px] mb-4 w-[600px]"
+      <Cropper
+        class="bg-light-100 h-[800px] mb-4 w-[1000px]"
         ref="cropperBox"
         :src="img"
-        :stencil-component="$options.components.CircleStencil"
+        :stencil-component="CircleStencil"
       />
-      <div class="ml-5">
-        <button class="ml-3" @click="getCrop">裁切圖片</button>
-        <button class="ml-3" @click="zoom(2)">放大</button>
-        <button class="ml-3" @click="zoom(0.5)">縮小</button>
+      <div class="flex ml-5">
+        <SquareButton @click="getCrop"> 裁切圖片 </SquareButton>
+        <SquareButton @click="zoom(2)"> 放大 </SquareButton>
+        <SquareButton @click="zoom(0.5)"> 縮小 </SquareButton>
+        <SquareButton @click="resetCropper"> 取消 </SquareButton>
         <input class="ml-3" type="file" @change="loadImage($event)" accept="image/*" />
       </div>
     </div>
     <div class="rounded-full h-[300px] ml-8 w-[300px] overflow-hidden">
-      <img :src="cropedImg" v-if="cropedImg" />
+      <img :src="croppedImg" v-if="croppedImg" />
       <div class="bg-dark-500 h-[300px] w-full" v-else></div>
     </div>
   </div>
@@ -24,13 +25,14 @@
 <script>
 import { ref } from 'vue';
 import { Cropper, CircleStencil } from 'vue-advanced-cropper';
+import SquareButton from './components/square-button.vue';
 import 'vue-advanced-cropper/dist/style.css';
 import img2 from '../public/berserk.jpeg';
 
 export default {
   components: {
     Cropper,
-    CircleStencil,
+    SquareButton,
   },
   setup() {
     const img = ref(
@@ -38,12 +40,21 @@ export default {
     );
 
     const cropperBox = ref(null);
-    const cropedImg = ref('');
+    const croppedImg = ref('');
 
     const getCrop = () => {
       const { canvas } = cropperBox.value.getResult();
 
-      cropedImg.value = canvas.toDataURL();
+      croppedImg.value = canvas.toDataURL();
+    };
+
+    const zoom = factor => {
+      cropperBox.value.zoom(factor);
+    };
+
+    const resetCropper = () => {
+      cropperBox.value.reset();
+      croppedImg.value = '';
     };
 
     const loadImage = event => {
@@ -59,23 +70,23 @@ export default {
           img.value = blob;
         });
       }
-    };
 
-    const zoom = factor => {
-      cropperBox.value.zoom(factor);
+      croppedImg.value = '';
     };
 
     return {
       img,
       img2,
-      cropedImg,
+      CircleStencil,
+      croppedImg,
       cropperBox,
       getCrop,
       loadImage,
       zoom,
+      resetCropper,
     };
   },
 };
 </script>
 
-<style scoped></style>
+<style></style>
