@@ -1,17 +1,22 @@
 <template>
-  <cropper
-    class="bg-light-100 h-[600px] w-[600px]"
-    ref="cropperBox"
-    :src="img"
-    :stencil-props="{
-      aspectRatio: 16 / 9,
-    }"
-    :stencil-component="$options.components.CircleStencil"
-  />
-  <button @click="getCrop">getCrop</button>
-  <input type="file" @change="loadImage($event)" accept="image/*" />
-  <div>
-    <img :src="cropedImg" alt="" v-if="cropedImg" />
+  <div class="flex">
+    <div>
+      <cropper
+        class="bg-light-100 h-[600px] mb-4 w-[600px]"
+        ref="cropperBox"
+        :src="img"
+        :stencil-component="$options.components.CircleStencil"
+      />
+      <div class="ml-5">
+        <button class="ml-3" @click="getCrop">裁切圖片</button>
+        <button class="ml-3" @click="zoom(2)">放大</button>
+        <button class="ml-3" @click="zoom(0.5)">縮小</button>
+        <input class="ml-3" type="file" @change="loadImage($event)" accept="image/*" />
+      </div>
+    </div>
+    <div class="rounded-full h-[300px] ml-8 w-[300px] overflow-hidden">
+      <img :src="cropedImg" v-if="cropedImg" />
+    </div>
   </div>
 </template>
 
@@ -55,6 +60,10 @@ export default {
       }
     };
 
+    const zoom = factor => {
+      cropperBox.value.zoom(factor);
+    };
+
     return {
       img,
       img2,
@@ -62,6 +71,7 @@ export default {
       cropperBox,
       getCrop,
       loadImage,
+      zoom,
     };
   },
 };
