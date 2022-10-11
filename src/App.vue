@@ -16,6 +16,7 @@
     </div>
     <div class="rounded-full h-[300px] ml-8 w-[300px] overflow-hidden">
       <img :src="cropedImg" v-if="cropedImg" />
+      <div class="bg-dark-500 h-[300px] w-full" v-else></div>
     </div>
   </div>
 </template>
