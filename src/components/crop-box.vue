@@ -5,6 +5,9 @@
     :src="customImage"
     :stencil-component="CircleStencil"
   />
+
+  <slide-bar />
+
   <div class="flex mb-5 justify-center">
     <button class="bg-dark-700 text-white py-2 px-2" @click="checkCrop">確定</button>
   </div>
