@@ -27,7 +27,6 @@ export default {
   emits: ['getCrop'],
   setup(props, { emit }) {
     const cropperBox = ref(null);
-    const croppedImg = ref('');
 
     const checkCrop = () => {
       const { canvas } = cropperBox.value.getResult();
@@ -36,7 +35,6 @@ export default {
 
     return {
       CircleStencil,
-      croppedImg,
       cropperBox,
       checkCrop,
     };
