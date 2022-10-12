@@ -5,12 +5,8 @@
     :src="customImage"
     :stencil-component="CircleStencil"
   />
-  <div class="flex mb-5">
-    <square-button @click="getCrop"> 確定 </square-button>
-  </div>
-
-  <div class="h-[300px] w-[300px]">
-    <img :src="croppedImg" />
+  <div class="flex mb-5 justify-center">
+    <button class="bg-dark-700 text-white py-2 px-2" @click="checkCrop">確定</button>
   </div>
 </template>
 
@@ -28,20 +24,21 @@ export default {
       type: String,
     },
   },
-  setup() {
+  emits: ['getCrop'],
+  setup(props, { emit }) {
     const cropperBox = ref(null);
     const croppedImg = ref('');
 
-    const getCrop = () => {
+    const checkCrop = () => {
       const { canvas } = cropperBox.value.getResult();
-      croppedImg.value = canvas.toDataURL();
+      emit('getCrop', canvas.toDataURL());
     };
 
     return {
       CircleStencil,
       croppedImg,
       cropperBox,
-      getCrop,
+      checkCrop,
     };
   },
 };
