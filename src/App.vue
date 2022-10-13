@@ -1,12 +1,12 @@
 <template>
-  <div class="flex flex-col mx-auto w-[1200px] items-center">
-    <input class="mb-9 ml-3" type="file" @change="loadImage($event)" accept="image/*" />
+  <div>
+    <input class="mb-9" type="file" @change="loadImage($event)" accept="image/*" />
     <!-- 模擬 lightbox -->
-    <div class="w-[600px]" v-if="customImage">
-      <crop-box :customImage="customImage" @getCrop="getCrop" />
+    <div v-if="customImage">
+      <crop-box :customImage="customImage" :cropWrapperWidth="cropWrapperWidth" @getCrop="getCrop" />
     </div>
 
-    <div class="h-[300px] w-[300px]">
+    <div class="">
       <img :src="croppedImg" />
     </div>
   </div>
@@ -19,6 +19,7 @@ export default {
   setup() {
     const customImage = ref('');
     const croppedImg = ref('');
+    const cropWrapperWidth = 800;
 
     const loadImage = event => {
       const { files } = event.target;
@@ -43,6 +44,7 @@ export default {
       croppedImg,
       loadImage,
       getCrop,
+      cropWrapperWidth,
     };
   },
 };
