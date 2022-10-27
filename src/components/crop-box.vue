@@ -1,6 +1,12 @@
 <template>
   <div :style="{ width: `${cropWrapperWidth}px` }" class="overflow-hidden">
-    <Cropper class="mb-4" ref="cropperBox" :src="customImage" :stencil-component="CircleStencil" />
+    <Cropper
+      class="mb-4"
+      ref="cropperBox"
+      :src="customImage"
+      :stencil-component="CircleStencil"
+      :canvas="canvasLimit"
+    />
     <div class="flex mb-5 justify-center">
       <button class="bg-dark-700 text-white py-2 px-2" @click="checkCrop">確定</button>
     </div>
@@ -29,6 +35,11 @@ export default {
   emits: ['getCrop'],
   setup(props, { emit }) {
     const cropperBox = ref(null);
+    //  限制圖片裁切後範圍
+    const canvasLimit = {
+      maxWidth: 600,
+      maxHeight: 600,
+    };
 
     const checkCrop = () => {
       const { canvas } = cropperBox.value.getResult();
@@ -38,6 +49,7 @@ export default {
     return {
       CircleStencil,
       cropperBox,
+      canvasLimit,
       checkCrop,
     };
   },
